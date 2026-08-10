@@ -9,7 +9,7 @@ A real-time streaming data pipeline that ingests simulated e-commerce clickstrea
 - [x] Local dev environment set up (Python virtual environment)
 - [x] PySpark installed and verified working locally
 - [x] Docker Compose configuration for local Kafka + Zookeeper
-- [ ] Kafka event producer (Python)
+- [X] Kafka event producer (Python)
 - [ ] Spark Structured Streaming job
 - [ ] Airflow orchestration DAG
 - [ ] Data quality checks (Great Expectations)
@@ -45,16 +45,27 @@ A real-time streaming data pipeline that ingests simulated e-commerce clickstrea
 -> Java 11+ (required by PySpark)
 
 ### Local environment
-```bash
+```
 python -m venv venv
 .\venv\Scripts\Activate.ps1      # Windows
 pip install -r requirements.txt
 ```
 
 ### Local Kafka (via Docker Compose)
-```bash
+
 docker-compose up -d
 docker ps   # confirm kafka and zookeeper containers are running
-```
+
 
 ## Project Structure (so far)
+
+.
+├── venv/                     # virtual environment (not committed)
+├── kafka_producer/
+│   └── generate_events.py      # Kafka producer simulating clickstream events
+├── docker-compose.yml           # local Kafka + Zookeeper setup ( for the showing the data on the terminal)
+├── requirements.txt
+├── test_spark.py
+└── README.md
+
+
