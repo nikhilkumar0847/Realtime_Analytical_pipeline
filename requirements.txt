@@ -1,0 +1,16 @@
+# 1. Level by level mention the necessary list
+# the -r take all the reuirements in a single way no need to install all the packages or tools one by one.
+
+# pyspark==3.5.0
+# delta-spark==2.4.0
+# kafka-python==2.0.2
+# faker==22.0.0
+# pandas
+
+# The pip in the terminal take all over the versions itself.
+
+pyspark
+delta-spark
+kafka-python
+faker
+pandas
