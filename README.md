@@ -84,3 +84,5 @@ This is the step by step structure
 -> Encountered a known Spark bug (SPARK-53042) causing a random NullPointerException on Windows + Java 17 during BlockManager registration — fixed by explicitly setting spark.driver.bindAddress and spark.driver.host to 127.0.0.1.
 -> Project folder inside OneDrive caused intermittent file-locking issues when deleting Spark checkpoint files during testing — worth keeping build folders outside synced directories in future projects.
 -> Confirmed successful end-to-end run: verified via file counts in both bronze (25 files) and silver (5 files) layers after a clean checkpoint reset.
+
+-> After that going to orchestrate the data's with the help of Airflow and here will verify the Gold data.
