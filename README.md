@@ -8,10 +8,10 @@ A real-time streaming data pipeline that ingests simulated e-commerce clickstrea
 
 - [x] Local dev environment set up (Python virtual environment)
 - [x] PySpark installed and verified working locally
-- [x] Docker Compose configuration for local Kafka + Zookeeper
+- [x] Docker Compose configuration for local Kafka + Zookeeper   # There is the two project Kafka and the Zookeper
 - [X] Kafka event producer (Python)
 - [X] Spark Structured Streaming job
-- [ ] Airflow orchestration DAG
+- [X] Airflow orchestration DAG
 - [ ] Data quality checks (Great Expectations)
 - [ ] Azure cloud deployment
 - [ ] Power BI dashboard
@@ -86,3 +86,5 @@ This is the step by step structure
 -> Confirmed successful end-to-end run: verified via file counts in both bronze (25 files) and silver (5 files) layers after a clean checkpoint reset.
 
 -> After that going to orchestrate the data's with the help of Airflow and here will verify the Gold data.
+
+-> Then after working on the orchestarted data
