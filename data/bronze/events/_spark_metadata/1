@@ -1,4 +1,0 @@
-v1
-{"path":"file:///C:/Users/nikhi/OneDrive/Desktop/project/data/bronze/events/part-00000-e27d85ec-fbf9-4c78-b397-e4c7d7f6f3f1-c000.snappy.parquet","size":3532,"isDir":false,"modificationTime":1786787492665,"blockReplication":1,"blockSize":33554432,"action":"add"}
-{"path":"file:///C:/Users/nikhi/OneDrive/Desktop/project/data/bronze/events/part-00001-b7fc0650-9ecb-4891-9a56-1c9ffbf09818-c000.snappy.parquet","size":3531,"isDir":false,"modificationTime":1786787493552,"blockReplication":1,"blockSize":33554432,"action":"add"}
-{"path":"file:///C:/Users/nikhi/OneDrive/Desktop/project/data/bronze/events/part-00002-d8c8e790-fc66-494c-9867-19225a205956-c000.snappy.parquet","size":3784,"isDir":false,"modificationTime":1786787493604,"blockReplication":1,"blockSize":33554432,"action":"add"}
