@@ -108,3 +108,5 @@ environment variables explicitly.
 -> Windowed aggregations don't emit until the watermark passes window-end**: With [outputMode("append")], a 5-minute window + 10-minute watermark never closed because test events were sent in short bursts, not spread over real elapsed time. Fix: ran producer + streaming job together continuously for 15-20 minutes so wall-clock time advanced the watermark naturally.
 
 -> startingOffsets: earliest [reprocesses full Kafka topic history on every restart**: Every streaming job restart reread all messages ever sent to the topic, not just new ones — explains why aggregated windows spanned multiple days despite short individual test runs. Worth switching to latest] post-debugging.
+
+After these steps now moved onto the data quality check.
