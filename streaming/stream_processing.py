@@ -65,6 +65,7 @@ raw_stream = (
 
 # Kafka gives us raw key/value bytes — we cast value to a string,
 # then parse that JSON string into structured columns using our schema
+
 parsed = (
     raw_stream
     .selectExpr("CAST(value AS STRING) as json_str")
