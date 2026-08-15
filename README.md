@@ -12,9 +12,9 @@ A real-time streaming data pipeline that ingests simulated e-commerce clickstrea
 -> [x] Kafka producer — tested and confirmed working
 -> [x] Spark Structured Streaming job — tested, confirmed writing real parquet output (bronze + windowed silver aggregation)
 -> [x] Airflow running via Docker (postgres + webserver + scheduler), custom image built successfully with Java 17 + PySpark 3.5.0
--> [x] DAG `gold_layer_pipeline` visible in Airflow UI with correct 2 tasks (`run_gold_aggregation` >> `run_data_quality_check`)
--> [x] `run_gold_aggregation` task — fixed and passing
--> [x] `run_data_quality_check` task — fixed and passing
+-> [x] DAG gold_layer_pipeline visible in Airflow UI with correct 2 tasks (`run_gold_aggregation` >> `run_data_quality_check`)
+-> [x] (run_gold_aggregation) task — fixed and passing
+-> [x] (run_data_quality_check) task — fixed and passing
 -> [x] End-to-end DAG run verified fully green in Airflow UI
 -> [ ] Great Expectations data quality checks — not started
 -> [ ] Azure cloud deployment — not started (Terraform scripts written, not yet run)
