@@ -3,10 +3,17 @@ import os
 # Same fix we used before — ensures Spark's internal worker processes use
 # this venv's Python instead of Windows' Store-redirect stub
 
+# environment setup for the locals abd their work 
+
 os.environ["PYSPARK_PYTHON"] = r"C:\Users\nikhi\OneDrive\Desktop\project\venv\Scripts\python.exe"
 os.environ["PYSPARK_DRIVER_PYTHON"] = r"C:\Users\nikhi\OneDrive\Desktop\project\venv\Scripts\python.exe"
 os.environ["HADOOP_HOME"] = r"C:\hadoop"
 os.environ["PATH"] = r"C:\hadoop\bin;" + os.environ["PATH"]   # add the both into the single environment varaible
+
+
+# * Without of Hadoop environment
+# os.environ["PYSPARK_PYTHON"] = "python3"
+# os.environ["PYSPARK_DRIVER_PYTHON"] = "python3"
 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, from_json, window, count, avg
@@ -31,7 +38,8 @@ spark = (
     .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.13:4.1.1")
     .config("spark.driver.bindAddress", "127.0.0.1")
     .config("spark.driver.host", "127.0.0.1")
-    .master("local[*]")
+    .config("spark.sql.shuffle.partitions","2")
+    .master("local[2]")
     .getOrCreate()
 )
 
@@ -54,10 +62,12 @@ EVENT_SCHEMA = StructType([
 ])
 
 # --- Read the raw stream from Kafka ---
+
 raw_stream = (
     spark.readStream
     .format("kafka")
-    .option("kafka.bootstrap.servers", "localhost:9092")
+    .option("kafka.bootstrap.servers", "localhost:9092")  # server for the working for the windows and for the local
+    #.option("kafka.bootstrap.servers", "kafka:29092")  # changing the port from the locals to kafka for the containerization inside of the docker
     .option("subscribe", "clickstream-events")
     .option("startingOffsets", "earliest")   # read from the beginning of the topic
     .load()
@@ -73,7 +83,7 @@ parsed = (
     .select("data.*")
 )
 
-# --- BRONZE LAYER: write raw parsed events as-is, no transformation ---
+# --- BRONZE LAYER: The raw parsed events as-is, no transformation ---
 # This preserves the original data exactly as it arrived — the "source of truth"
 
 bronze_query = (
@@ -81,7 +91,11 @@ bronze_query = (
     .format("parquet")
     .outputMode("append")
     .option("path", "./data/bronze/events")
-    .option("checkpointLocation", "./checkpoints/bronze")
+    .option("checkpointLocation", "./checkpoints/bronze")  # checking the bronze  layer for the windows and that local host can work easily out it of
+    
+    # updating the bronze layer output and Turn the method into the airflow bronze level working
+    # .option("path", "/opt/airflow/data/bronze/events")
+    # .option("checkpointLocation", "/opt/airflow/checkpoints/bronze")
     .start()
 )
 
@@ -105,12 +119,20 @@ silver_query = (
     windowed_agg.writeStream
     .format("parquet")
     .outputMode("append")
-    .option("path", "./data/silver/category_window_agg")
-    .option("checkpointLocation", "./checkpoints/silver")
+    # .option("path", "./data/silver/category_window_agg")
+    # .option("checkpointLocation", "./checkpoints/silver")
+
+    # * Updating the silver data for the airflow updation inside of it
+    .option("path", "/opt/airflow/data/silver/category_window_agg")
+    .option("checkpointLocation", "/opt/airflow/checkpoints/silver")
     .start()
 )
 
 print("Streaming job started. Writing to ./data/bronze and ./data/silver. Press Ctrl+C to stop.")
+
+
+
+# print("Streaming job started. Writing to /opt/airflow/data/bronze and /opt/airflow/data/silver. Press Ctrl+C to stop.") # Both of the data working for the airflow (streaming-job)
 
 # Keeps the script alive, processing continuously until you stop it
 

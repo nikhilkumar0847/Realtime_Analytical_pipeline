@@ -16,5 +16,40 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+
+      # --- DUAL LISTENER SETUP --- (one for the localhosting and the other one is for kafka containerization)
+
+      # PLAINTEXT        -> used by things OUTSIDE Docker (your Windows producer, run via `python kafka_producer\generate_event.py`)
+      #                      connects via "localhost:9092"  ( for the local work)
+
+      # PLAINTEXT_INTERNAL -> used by things INSIDE Docker's network (like our new streaming-job container)
+      #                      connects via "kafka:29092" (service name + internal port) (for the containerization work inside of the kafka)
+
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_INTERNAL://0.0.0.0:29092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
+
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  # --- Containerized streaming job (for the phase 2 of the docker containerization setup) ---
+  # Runs stream_processing.py inside Docker instead of on Windows directly.
+  # Connects to Kafka via the INTERNAL listener (kafka:29092), and writes
+  # output to a Docker-managed volume instead of OneDrive-synced folders,
+  # avoiding file-locking/race issues we hit with checkpoint state files.
+  streaming-job:
+    build:
+      context: .
+      dockerfile: docker_file_setup.streaming
+    container_name: project-streaming-job-1
+    depends_on:
+      - kafka
+    volumes:
+      - ./data:/opt/airflow/data
+      - streaming-checkpoints:/opt/airflow/checkpoints
+    networks:
+      - default
+    
+
+volumes:
+  streaming-checkpoints:
