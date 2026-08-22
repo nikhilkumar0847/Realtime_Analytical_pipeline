@@ -6,3 +6,7 @@ __pycache__/
 *.pyc
 .env
 streaming_error.txt
+
+
+venv_gx/
+gx/uncommitted/   # only for the great expectations

@@ -13,6 +13,8 @@ x-airflow-common:
     - ./dags:/opt/airflow/dags
     - ./airflow_logs:/opt/airflow/logs
     - ./data:/opt/airflow/data
+    - ./great_expectations_check.py:/opt/airflow/great_expectations_check.py
+    - ./gx:/opt/airflow/gx
 
 # depends_on:
 #     - postgres

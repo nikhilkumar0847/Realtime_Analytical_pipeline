@@ -67,7 +67,8 @@ raw_stream = (
     spark.readStream
     .format("kafka")
     .option("kafka.bootstrap.servers", "localhost:9092")  # server for the working for the windows and for the local
-    #.option("kafka.bootstrap.servers", "kafka:29092")  # changing the port from the locals to kafka for the containerization inside of the docker
+    #.option("kafka.bootstrap.servers", "kafka:29092")  # changing the port from the locals to kafka for the private containerization inside of the docker
+    
     .option("subscribe", "clickstream-events")
     .option("startingOffsets", "earliest")   # read from the beginning of the topic
     .load()
@@ -93,7 +94,7 @@ bronze_query = (
     .option("path", "./data/bronze/events")
     .option("checkpointLocation", "./checkpoints/bronze")  # checking the bronze  layer for the windows and that local host can work easily out it of
     
-    # updating the bronze layer output and Turn the method into the airflow bronze level working
+    #  * container portion for the private working use(commneted out for the windows)
     # .option("path", "/opt/airflow/data/bronze/events")
     # .option("checkpointLocation", "/opt/airflow/checkpoints/bronze")
     .start()
@@ -119,12 +120,12 @@ silver_query = (
     windowed_agg.writeStream
     .format("parquet")
     .outputMode("append")
-    # .option("path", "./data/silver/category_window_agg")
-    # .option("checkpointLocation", "./checkpoints/silver")
+    .option("path", "./data/silver/category_window_agg")
+    .option("checkpointLocation", "./checkpoints/silver")
 
-    # * Updating the silver data for the airflow updation inside of it
-    .option("path", "/opt/airflow/data/silver/category_window_agg")
-    .option("checkpointLocation", "/opt/airflow/checkpoints/silver")
+    # * Commeneted out for the windows and the local use
+    # .option("path", "/opt/airflow/data/silver/category_window_agg")
+    # .option("checkpointLocation", "/opt/airflow/checkpoints/silver")
     .start()
 )
 
